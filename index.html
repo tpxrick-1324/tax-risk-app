@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>企业税务风险自测</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: #f5f6fa; color: #1a1a2e;
+}
+.header {
+  background: linear-gradient(135deg, #0F2340, #1A365D);
+  padding: 28px 20px 24px; text-align:center;
+}
+.header h1 { color:#fff; font-size:22px; font-weight:800; margin-bottom:6px; }
+.header p { color:rgba(255,255,255,0.7); font-size:13px; line-height:1.6; }
+.header .badge {
+  display:inline-block; background:rgba(255,255,255,0.12);
+  border-radius:20px; padding:3px 12px; font-size:11px; color:#e8c88a;
+  margin-bottom:10px;
+}
+.form-wrap { padding:20px 16px 32px; max-width:480px; margin:0 auto; }
+.question {
+  background:#fff; border-radius:14px; padding:18px;
+  margin-bottom:12px; box-shadow:0 2px 12px rgba(26,54,93,0.08);
+}
+.question .q-title {
+  font-size:15px; font-weight:700; margin-bottom:10px; line-height:1.4;
+}
+.question .q-num {
+  display:inline-block; background:#1A365D; color:#fff;
+  border-radius:50%; width:20px; height:20px; text-align:center;
+  font-size:11px; line-height:20px; margin-right:6px; vertical-align:middle;
+}
+.options { display:flex; gap:10px; }
+.options label {
+  flex:1; text-align:center; padding:10px 0;
+  border:1.5px solid #e0e4ed; border-radius:8px;
+  font-size:14px; cursor:pointer; transition:all .2s;
+  background:#f8f9fc; color:#666;
+}
+.options input:checked + label {
+  border-color:#1A365D; background:rgba(26,54,93,0.06);
+  color:#1A365D; font-weight:700;
+}
+.options input.shi:checked + label { border-color:#c0392b; background:rgba(192,57,43,0.06); color:#c0392b; }
+.options input.fou:checked + label { border-color:#27ae60; background:rgba(39,174,96,0.06); color:#27ae60; }
+.options input { display:none; }
+.btn-submit {
+  display:block; width:100%; padding:16px;
+  background:linear-gradient(135deg, #1A365D, #2A4F8A);
+  border:none; border-radius:12px; color:#fff; font-size:17px; font-weight:700;
+  cursor:pointer; transition:all .2s; margin-top:8px;
+}
+.btn-submit:active { transform:scale(0.97); opacity:0.9; }
+.btn-submit:disabled { opacity:0.5; cursor:not-allowed; }
+.result-wrap { display:none; padding:20px 16px; max-width:480px; margin:0 auto; }
+.result-card {
+  background:#fff; border-radius:16px; padding:28px 20px;
+  box-shadow:0 4px 20px rgba(26,54,93,0.12); text-align:center;
+}
+.result-score { font-size:56px; font-weight:900; line-height:1; margin:12px 0 4px; }
+.result-label { font-size:16px; font-weight:700; margin-bottom:16px; }
+.result-desc { font-size:13px; color:#666; line-height:1.6; margin-bottom:20px; text-align:left; }
+.result-detail { text-align:left; font-size:13px; color:#555; line-height:1.8; margin-bottom:20px; }
+.result-detail li { list-style:none; padding:4px 0; border-bottom:1px solid #f0f0f0; }
+.result-tag {
+  display:inline-block; padding:4px 16px; border-radius:20px;
+  font-size:13px; font-weight:700; margin-bottom:10px;
+}
+.tag-safe { background:#d4edda; color:#155724; }
+.tag-warn { background:#fff3cd; color:#856404; }
+.tag-danger { background:#f8d7da; color:#721c24; }
+.tag-urgent { background:#dc3545; color:#fff; }
+.result-cta {
+  background:linear-gradient(135deg, #c48f4a, #d4a04a);
+  color:#fff; border:none; border-radius:10px;
+  padding:14px 24px; font-size:16px; font-weight:700;
+  width:100%; cursor:pointer; transition:all .2s; margin-top:4px;
+}
+.result-cta:active { transform:scale(0.97); }
+.result-cta:disabled { opacity:0.6; cursor:default; }
+.form-lead {
+  background:#fff; border-radius:14px; padding:20px;
+  margin-top:16px; box-shadow:0 2px 12px rgba(26,54,93,0.08); display:none;
+}
+.form-lead h3 { font-size:15px; text-align:center; margin-bottom:12px; }
+.form-lead input {
+  width:100%; padding:12px 14px; border:1.5px solid #e0e4ed;
+  border-radius:10px; font-size:14px; margin-bottom:10px;
+  background:#f8f9fc; outline:none;
+}
+.form-lead input:focus { border-color:#1A365D; background:#fff; }
+.form-lead .btn-lead {
+  width:100%; padding:13px; background:#1A365D; border:none;
+  border-radius:10px; color:#fff; font-size:15px; font-weight:700; cursor:pointer;
+}
+.form-lead .btn-lead:active { opacity:0.8; }
+.form-lead .btn-lead:disabled { opacity:0.5; cursor:not-allowed; }
+.back-btn {
+  display:inline-block; margin-top:16px; color:#1A365D;
+  font-size:13px; cursor:pointer; text-decoration:underline;
+}
+.footer {
+  text-align:center; padding:20px; font-size:11px; color:#999; line-height:1.6;
+}
+.footer strong { color:#1A365D; }
+.toast {
+  position:fixed; bottom:40px; left:50%; transform:translateX(-50%) translateY(80px);
+  background:#333; color:#fff; padding:10px 20px; border-radius:10px;
+  font-size:14px; opacity:0; transition:all .3s; z-index:999;
+  pointer-events:none; white-space:nowrap;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.loading {
+  display:inline-block; width:14px; height:14px;
+  border:2px solid rgba(255,255,255,0.3); border-top-color:#fff;
+  border-radius:50%; animation:spin .6s linear infinite;
+  vertical-align:middle; margin-right:6px;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="header">
+  <div class="badge">永勤财税 · 企业财税管家</div>
+  <h1>企业税务风险自测</h1>
+  <p>10道题 · 仅需3分钟 · 免费获取专属风险评估</p>
+</div>
+
+<div class="form-wrap" id="formWrap">
+  <div id="questionsContainer"></div>
+  <button class="btn-submit" id="submitBtn" onclick="submitQuiz()">提交测评</button>
+</div>
+
+<div class="result-wrap" id="resultWrap">
+  <div class="result-card">
+    <div class="result-tag" id="resultTag">等级</div>
+    <div class="result-score" id="resultScore">0</div>
+    <div class="result-label" id="resultLabel">分</div>
+    <div class="result-desc" id="resultDesc"></div>
+    <ul class="result-detail" id="resultDetail"></ul>
+    <button class="result-cta" id="ctaBtn" onclick="showLeadForm()">📞 免费获取专家解读方案</button>
+  </div>
+
+  <div class="form-lead" id="leadForm">
+    <h3>📋 填写信息，获取完整诊断报告</h3>
+    <input type="text" id="leadName" placeholder="您的姓名" required>
+    <input type="tel" id="leadPhone" placeholder="手机号码" required>
+    <input type="text" id="leadCompany" placeholder="企业名称（选填）">
+    <button class="btn-lead" id="leadSubmitBtn" onclick="submitLead()">提交，获取报告</button>
+    <div style="text-align:center;margin-top:10px;font-size:11px;color:#999;">信息严格保密，仅用于财税服务对接</div>
+  </div>
+
+  <div style="text-align:center;margin-top:12px;">
+    <span class="back-btn" onclick="resetQuiz()">重新测评</span>
+  </div>
+</div>
+
+<div class="footer">
+  <strong>永勤财税</strong> · 企业全生命周期财税服务
+</div>
+
+<script>
+// ── 10道题 ──
+const questions = [
+  "企业是否存在A/B两套账？",
+  "企业是否存在账外资金回流，其他应付款过大？",
+  "企业是否存在无票支出（替票报销入账）问题？",
+  "企业是否存在按开票时间确认收入（提前或延后开票）？",
+  "企业是否存在公私不分、企业小金库风险问题？",
+  "企业是否存在分红与员工个税税负较高问题？",
+  "企业是否存在社保缴纳基数与发放工资不符问题？",
+  "企业是否存在账面记录瑕疵或历史账务需要梳理？",
+  "企业是否存在商业回扣或居间费无票入账的问题？",
+  "企业是否存在股权转让溢价、高额所得税问题？"
+];
+const scores = [15, 12, 10, 8, 12, 6, 8, 7, 12, 10];
+const details = [
+  "A/B两套账 — 最严重的税务违法之一",
+  "账外资金回流 — 资金流异常，金税四期核心监控项",
+  "无票支出/替票报销 — 虚假发票列支成本",
+  "收入确认不合规 — 纳税所属期错误",
+  "公私不分/小金库 — 隐瞒收入+偷逃个税",
+  "个税税负高 — 缺乏筹划多缴冤枉税",
+  "社保基数不符 — 社保入税自动比对即预警",
+  "账务不规范 — 稽查时无法自证清白",
+  "回扣/居间费无票 — 商业贿赂+偷逃个税",
+  "股权转让溢价 — 错过筹划20%个税无法补救"
+];
+const levelMap = [
+  { max: 10, tag: '低风险', cls: 'tag-safe', desc: '企业财税状况整体合规，建议每年做一次全面体检。' },
+  { max: 30, tag: '关注', cls: 'tag-warn', desc: '存在一定财税瑕疵，建议升级代账服务，做专项辅导。' },
+  { max: 55, tag: '预警', cls: 'tag-danger', desc: '存在明显的风险隐患，建议尽快安排全面账务排查。' },
+  { max: 999, tag: '高危', cls: 'tag-urgent', desc: '已处于高稽查风险区，需立即介入处理！' }
+];
+
+let answers = [];
+let lastScore = 0;
+let lastLevel = '';
+
+function renderQuestions() {
+  const c = document.getElementById('questionsContainer');
+  c.innerHTML = '';
+  questions.forEach((q, i) => {
+    const d = document.createElement('div'); d.className = 'question';
+    d.innerHTML = `
+      <div class="q-title"><span class="q-num">${i+1}</span>${q}</div>
+      <div class="options">
+        <input type="radio" name="q${i}" id="q${i}y" value="shi" class="shi">
+        <label for="q${i}y">是</label>
+        <input type="radio" name="q${i}" id="q${i}n" value="fou" class="fou" checked>
+        <label for="q${i}n">否</label>
+      </div>`;
+    c.appendChild(d);
+  });
+}
+
+function submitQuiz() {
+  answers = [];
+  for (let i = 0; i < questions.length; i++) {
+    const s = document.querySelector(`input[name="q${i}"]:checked`);
+    if (s) answers.push(s.value); else { showToast('请回答全部题目'); return; }
+  }
+  let total = 0, risks = [];
+  answers.forEach((a, i) => { if (a === 'shi') { total += scores[i]; risks.push(details[i]); } });
+  showResult(total, risks);
+}
+
+function showResult(score, risks) {
+  document.getElementById('formWrap').style.display = 'none';
+  document.getElementById('resultWrap').style.display = 'block';
+  document.getElementById('resultScore').textContent = score;
+  document.getElementById('leadForm').style.display = 'none';
+  document.getElementById('ctaBtn').disabled = false;
+  document.getElementById('ctaBtn').textContent = '📞 免费获取专家解读方案';
+
+  const lv = levelMap.find(l => score <= l.max);
+  lastScore = score;
+  lastLevel = lv.tag;
+
+  document.getElementById('resultTag').className = `result-tag ${lv.cls}`;
+  document.getElementById('resultLabel').textContent = `分 · ${lv.tag}`;
+  document.getElementById('resultDesc').textContent = lv.desc;
+
+  let html = risks.length
+    ? '<li style="font-weight:700;color:#1A365D;border:none;">📌 发现的风险点：</li>' +
+      risks.map(r => `<li>⚠️ ${r}</li>`).join('')
+    : '<li style="border:none;">✅ 没有发现明显风险点，继续保持！</li>';
+  document.getElementById('resultDetail').innerHTML = html;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showLeadForm() {
+  document.getElementById('leadForm').style.display = 'block';
+  document.getElementById('leadForm').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ───────────────────────────────────────────
+// 这才是核心改动：真实的提交逻辑
+// ───────────────────────────────────────────
+async function submitLead() {
+  const name = document.getElementById('leadName').value.trim();
+  const phone = document.getElementById('leadPhone').value.trim();
+  const company = document.getElementById('leadCompany').value.trim();
+
+  if (!name) { showToast('请输入您的姓名'); return; }
+  if (!phone || !/^1\d{10}$/.test(phone)) { showToast('请输入正确的手机号码'); return; }
+
+  const btn = document.getElementById('leadSubmitBtn');
+  btn.innerHTML = '<span class="loading"></span> 提交中...';
+  btn.disabled = true;
+
+  try {
+    // 计算风险点文本
+    const riskTexts = [];
+    answers.forEach((a, i) => { if (a === 'shi') riskTexts.push(details[i]); });
+
+    const res = await fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name, phone, company,
+        score: lastScore,
+        level: lastLevel,
+        risks: riskTexts.join('；') || '无',
+        source: 'H5自测工具'
+      })
+    });
+
+    const result = await res.json();
+
+    if (result.success) {
+      showToast('✅ 提交成功！我们将在30分钟内与您联系');
+      btn.textContent = '已提交 ✓';
+      document.getElementById('ctaBtn').textContent = '✅ 已提交，等待专家联系';
+      document.getElementById('ctaBtn').disabled = true;
+      document.getElementById('leadForm').style.display = 'none';
+    } else {
+      showToast('提交失败，请稍后再试');
+      btn.textContent = '重新提交';
+      btn.disabled = false;
+    }
+  } catch (e) {
+    showToast('网络异常，请检查后重试');
+    btn.textContent = '提交，获取报告';
+    btn.disabled = false;
+  }
+}
+
+function resetQuiz() {
+  document.getElementById('formWrap').style.display = 'block';
+  document.getElementById('resultWrap').style.display = 'none';
+  document.getElementById('leadForm').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+renderQuestions();
+</script>
+</body>
+</html>
